@@ -7,6 +7,8 @@ import requests
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 
+from ratelimit import limits
+
 BASE_URL = "https://min-api.cryptocompare.com"
 
 class CryptoCompare():
@@ -18,6 +20,7 @@ class CryptoCompare():
 
         self.session.mount(BASE_URL, HTTPAdapter(max_retries=retries))
 
+    @limits(calls=6, period=60)
     def get_symbols(self):
         syms = collections.OrderedDict()
         for page in range(0,10):        
@@ -30,15 +33,17 @@ class CryptoCompare():
                 syms[coin["CoinInfo"]["Internal"]] = coin["CoinInfo"]["FullName"]
         return syms
 
+    @limits(calls=6, period=60)
     def get_price(self, fsyms, tsyms):
         url = f"{BASE_URL}/data/pricemulti?fsyms={','.join(fsyms)}&tsyms={','.join(tsyms)}"
-        r = self.session.get(url)
+        r = self.session.get(url, headers={"authorization": "Apikey "+config.CC_API_KEY})
         return r.json()
 
     #max count is 30
+    @limits(calls=6, period=60)
     def get_top(self, tsym= "USD", count=40):
         url = f"{BASE_URL}/data/top/mktcapfull?limit={count}&tsym={tsym}"
-        r = self.session.get(url)
+        r = self.session.get(url, headers={"authorization": "Apikey "+config.CC_API_KEY})
         data= r.json()["Data"]
         coins =[]
         rank=1

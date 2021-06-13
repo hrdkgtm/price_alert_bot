@@ -40,7 +40,7 @@ class CommandHandler:
             elif command.startswith('lower') or command.startswith('higher'):
                 self.higher_lower(chatId, command)
             else:
-                self.api.sendMessage('Unknown command', chatId)
+                self.api.sendMessage('OOOO LHA GOBLOK COMMAND YANG BENER JEMBOT', chatId)
 
     def clear(self, chatId, command):
         if 'alerts' in self.db and chatId in self.db['alerts']:
@@ -146,7 +146,7 @@ class CommandHandler:
             self.repository.get_symbols()[fsym], 'below' if op == 'LOWER' else 'above', format_price(target), tsym)
         self.api.sendMessage(msg, chatId)
 
-    @cache("cmd.Help", 100000)
+#    @cache("cmd.Help", 100000)
     def help(self, chatId, command):
         self.log.info("reading help file")
         with open(config.HELP_FILENAME, 'rb') as fp:
