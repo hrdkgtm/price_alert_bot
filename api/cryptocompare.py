@@ -10,6 +10,8 @@ from requests.adapters import HTTPAdapter
 from ratelimit import limits
 
 BASE_URL = "https://min-api.cryptocompare.com"
+RATELIMIT_COUNT = 15
+RATELIMIT_PERIOD = 60
 
 class CryptoCompare():
     def __init__(self):
@@ -20,7 +22,7 @@ class CryptoCompare():
 
         self.session.mount(BASE_URL, HTTPAdapter(max_retries=retries))
 
-    @limits(calls=6, period=60)
+    @limits(calls=RATELIMIT_COUNT, period=RATELIMIT_PERIOD)
     def get_symbols(self):
         syms = collections.OrderedDict()
         for page in range(0,10):        
@@ -33,14 +35,14 @@ class CryptoCompare():
                 syms[coin["CoinInfo"]["Internal"]] = coin["CoinInfo"]["FullName"]
         return syms
 
-    @limits(calls=6, period=60)
+    @limits(calls=RATELIMIT_COUNT, period=RATELIMIT_PERIOD)
     def get_price(self, fsyms, tsyms):
         url = f"{BASE_URL}/data/pricemulti?fsyms={','.join(fsyms)}&tsyms={','.join(tsyms)}"
         r = self.session.get(url, headers={"authorization": "Apikey "+config.CC_API_KEY})
         return r.json()
 
     #max count is 30
-    @limits(calls=6, period=60)
+    @limits(calls=RATELIMIT_COUNT, period=RATELIMIT_PERIOD)
     def get_top(self, tsym= "USD", count=40):
         url = f"{BASE_URL}/data/top/mktcapfull?limit={count}&tsym={tsym}"
         r = self.session.get(url, headers={"authorization": "Apikey "+config.CC_API_KEY})
