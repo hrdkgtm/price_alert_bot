@@ -40,7 +40,7 @@ class CommandHandler:
             elif command.startswith('lower') or command.startswith('higher'):
                 self.higher_lower(chatId, command)
             else:
-                self.api.sendMessage('OOOO LHA GOBLOK COMMAND YANG BENER JEMBOT', chatId)
+                self.api.sendMessage('Unknown Command', chatId)
 
     def clear(self, chatId, command):
         if 'alerts' in self.db and chatId in self.db['alerts']:
