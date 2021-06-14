@@ -111,4 +111,4 @@ nohup.out
 secrets.py
 charts/*.png
 
-log/*.log
+log/*
