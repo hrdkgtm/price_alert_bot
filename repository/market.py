@@ -43,7 +43,7 @@ class MarketRepository(object):
         return out
     
     PARTITION_SIZE = 45
-    CACHE_DURATION_PRICE = 10.0
+    CACHE_DURATION_PRICE = 300.0
     last_price_queries = {}
     price_partitions = {}
     def get_price(self, fsym, tsym):
