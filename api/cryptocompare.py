@@ -10,8 +10,8 @@ from requests.adapters import HTTPAdapter
 from ratelimit import limits
 
 BASE_URL = "https://min-api.cryptocompare.com"
-RATELIMIT_COUNT = 15
-RATELIMIT_PERIOD = 60
+RATELIMIT_COUNT = 10
+RATELIMIT_PERIOD = 300
 
 class CryptoCompare():
     def __init__(self):
